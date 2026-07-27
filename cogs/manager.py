@@ -14,7 +14,7 @@ class Manager(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(activity=discord.Game(name="作:@musuke.exe (musuke)"))
+        await self.bot.change_presence(activity=discord.Game(name="作:musuke"))
 
     @app_commands.command(name="setup", description="必要なチャンネルを自動生成・同期します")
     async def setup(self, interaction: discord.Interaction):
