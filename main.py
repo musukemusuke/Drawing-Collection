@@ -20,12 +20,34 @@ class DrawingBot(commands.Bot):
                 await self.load_extension(f'cogs.{filename[:-3]}')
         await self.tree.sync()
         asyncio.create_task(self.shutdown_timer())
-        print("Bot is ready and commands synced.")
+        
+        # ログイン成功時の情報表示
+        print(f"✅ ログイン成功: {self.user} ({self.user.id})")
+        print(f"📊 参加サーバー数: {len(self.guilds)} サーバー")
+        
+        # 参加している全サーバーの名前とID、メンバー一覧を表示（GitHub Actionsログで確認可能）
+        print("\n=== 参加サーバー一覧 ===")
+        for i, guild in enumerate(self.guilds, 1):
+            print(f"{i}. {guild.name} (ID: {guild.id}) - メンバー数: {guild.member_count}")
+            # ボット以外の人間メンバーとbotメンバーを分けて一覧表示
+            human_members = [member.name for member in guild.members if not member.bot]
+            bot_members = [member.name for member in guild.members if member.bot]
+            
+            if human_members:
+                print(f"   人間メンバー: {', '.join(human_members)}")
+            else:
+                print("   人間メンバー: いません")
+                
+            if bot_members:
+                print(f"   Botメンバー: {', '.join(bot_members)}")
+            else:
+                print("   Botメンバー: いません")
+        print("======================\n")
 
     async def shutdown_timer(self):
-        # GitHub Actionsの制限(6時間)に余裕を持って、5時間50分(21000秒)で終了させる
+        # GitHub Actionsの制限(6時間)に余裕を持って、2時間45分(9900秒)で終了させる
         # これによりワークフローが「タイムアウト失敗」にならず正常終了します
-        await asyncio.sleep(21000)
+        await asyncio.sleep(9900)
         print("Shutdown timer reached. Closing bot...")
         await self.close()
 
